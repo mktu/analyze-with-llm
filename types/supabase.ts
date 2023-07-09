@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
@@ -28,6 +28,31 @@ export interface Database {
           id?: number
           metadata?: Json | null
         }
+        Relationships: []
+      }
+      histories: {
+        Row: {
+          created_at: string | null
+          id: number
+          message: string | null
+          url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          message?: string | null
+          url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          message?: string | null
+          url?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       urls: {
         Row: {
@@ -48,6 +73,7 @@ export interface Database {
           status?: string | null
           url?: string
         }
+        Relationships: []
       }
     }
     Views: {

@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  a {
+    color: #1b72e8;
+    @apply focus:outline-none;
+    @apply focus-visible:ring-2;
+    @apply focus-visible:ring-offset-2;
+    @apply focus-visible:rounded-sm;
+  }
+}

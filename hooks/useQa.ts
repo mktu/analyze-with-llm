@@ -1,17 +1,25 @@
 "use client"
+import { ClientUserId } from "@/utils/constants";
 import { useCallback, useState } from "react"
+import { useHistory } from "./useHistory";
 
 const QA_PATH = '/api/analyze'
+const template = `{ここに事象}に関連するIssue TitleとIssue URLを教えてください。
+また、上記に関連するIssue Descriptionを100字以内で要約してください。
+回答の際には、日本語で回答してください。関連する内容が見つからない場合、「わかりません」と答えてください。`
 
 export const useQa = (url?: string) => {
-    const [question, setQuestion] = useState('');
-    const [history, setHistory] = useState<string[]>([]);
+    const { histories, setHistories, deleteHistory } = useHistory(url);
+    const [question, setQuestion] = useState(histories.length > 0 ? '' : template);
 
     const sendQuestion = useCallback(async () => {
         if (!url) {
             return;
         }
-        setHistory(before => [question, ...before]);
+        setHistories(before => [{
+            userId: ClientUserId,
+            message: question
+        }, ...before]);
         const ret = await fetch(QA_PATH, {
             method: "POST",
             headers: {
@@ -19,7 +27,7 @@ export const useQa = (url?: string) => {
             },
             body: JSON.stringify({
                 url: url,
-                history,
+                histories: [],
                 question
             }),
         })
@@ -28,9 +36,13 @@ export const useQa = (url?: string) => {
             return
         }
         const answer = (await ret.json()).message as string
-        setHistory(before => [answer, ...before]);
-    }, [url, history, question]);
+        setHistories(before => [{
+            userId: ClientUserId,
+            message: answer
+        }, ...before]);
+    }, [url, question, setHistories]);
+
     return {
-        question, setQuestion, history, sendQuestion
+        question, setQuestion, histories, sendQuestion, deleteHistory
     }
 }

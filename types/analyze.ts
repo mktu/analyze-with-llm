@@ -7,3 +7,8 @@ export type UrlInfo = {
 export type GetUrlInfo = (UrlInfo & {
     result: 'found'
 }) | { result: 'not found' }
+
+export type HistoryInfo = {
+    userId: string,
+    message: string
+}

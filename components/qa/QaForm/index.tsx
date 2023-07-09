@@ -1,1 +1,1 @@
-export { default } from './QaForm'
+export { default } from './Root'

@@ -1,4 +1,5 @@
-import { clearEmbeddings, getUrlInfo, storeEmbeddings } from '@/services/llm';
+import { storeReadme } from '@/logics';
+import { clearEmbeddings, getUrlInfo } from '@/services/supabase';
 import { GetUrlInfo } from '@/types/analyze';
 import { NextFetchEvent, NextResponse } from 'next/server';
 
@@ -33,7 +34,7 @@ export async function POST(request: Request, context: NextFetchEvent) {
     if (remove) {
         await clearEmbeddings(url);
     } else {
-        await storeEmbeddings(url);
+        await storeReadme(url);
         // https://github.com/vercel/next.js/discussions/50441
         // context.waitUntil(storeEmbeddings(url));
     }
